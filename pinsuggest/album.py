@@ -10,7 +10,7 @@ class Album:
     """
     def __init__(self, topic, quantity_of_images=10) -> None:
         self.images = []
-        self.quantity_of_images = quantity_of_images
+        self._quantity_of_images = quantity_of_images
         self.pinterest_HTML = ""
         self.topic = topic
 
@@ -28,7 +28,7 @@ class Album:
         image_list = []
         indexes_of_images = []
 
-        for _ in range(0,self.quantity_of_images):
+        for _ in range(0,self._quantity_of_images):
             while True:
                 random_index = randint(0, len(images) - 1)
                 if random_index in indexes_of_images:
@@ -72,3 +72,6 @@ class Album:
                 if new_image.link_to == old_image.link_to:
                     return False
         return True
+    
+    def set_quantity_of_images(self, number):
+        self._quantity_of_images = number

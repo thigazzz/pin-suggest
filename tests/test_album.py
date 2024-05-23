@@ -1,10 +1,13 @@
 from random import randint
 
-from tests.fake import fake_pinterest_HTML
+from tests.fake import fake_images_HTML
 from pinsuggest.album import Album
 from pinsuggest.topic import Topic
 from pinsuggest.image import Image
 
+
+# TODO: Test to validate when the number of images 
+# to get is greater of images getted
 
 def test_generate_list_with_different_images_from_each_other():
     """
@@ -23,7 +26,7 @@ def test_generate_list_with_different_images_from_each_other():
         ),
     ]
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
-    album.pinterest_HTML = fake_pinterest_HTML
+    album.pinterest_HTML = fake_images_HTML
 
     image_list = album.get_images()
 
@@ -38,7 +41,7 @@ def test_generate_list_of_different_images_between_one_call_and_another():
     Test to ensure that subsequent sets of images do not contain duplicates from previous sets.
     """
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
-    album.pinterest_HTML = fake_pinterest_HTML
+    album.pinterest_HTML = fake_images_HTML
 
     old_list = album.get_images()
     new_list = album.get_images()
@@ -59,7 +62,7 @@ def test_get_images_for_specified_quantity():
     # The quantity, in this case, is 5 images per call
     """
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
-    album.pinterest_HTML = fake_pinterest_HTML
+    album.pinterest_HTML = fake_images_HTML
 
     images_list = album.get_images()
 
