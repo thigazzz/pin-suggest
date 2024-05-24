@@ -1,7 +1,14 @@
 ## The following requirements were added by pip freeze:
+beautifulsoup4==4.12.3
+certifi==2024.2.2
+charset-normalizer==3.3.2
 exceptiongroup==1.2.1
+idna==3.7
 iniconfig==2.0.0
 packaging==24.0
 pluggy==1.5.0
 pytest==8.2.0
+requests==2.32.2
+soupsieve==2.5
 tomli==2.0.1
+urllib3==2.2.1
