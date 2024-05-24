@@ -104,3 +104,31 @@ def test_detect_repeated_images_between_older_and_newer_images():
     )
 
     assert is_diff_image_list == False
+
+def test_favorite_and_image():
+    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album.pinterest_HTML = fake_images_HTML
+
+    images = album.get_images()
+    album.favorite_image(images[0])
+    
+    assert images[0].get_is_favorited() == True
+
+def test_not_favorite_a_always_favorited_image():
+    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album.pinterest_HTML = fake_images_HTML
+
+    images = album.get_images()
+    album.favorite_image(images[0])
+    
+    assert album.favorite_image(images[0]) == None
+
+def test_unfavorite_and_image():
+    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album.pinterest_HTML = fake_images_HTML
+
+    images = album.get_images()
+    album.favorite_image(images[0])
+    album.unfavorite_image(images[0])
+    
+    assert images[0].get_is_favorited() == False

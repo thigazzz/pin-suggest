@@ -38,10 +38,10 @@ class Album:
                 image_src = images[random_index].find(id="src")
                 image_list.append(
                     Image(
-                        id=randint(1, 100),
-                        title=image_name,
-                        link_to=image_src,
-                        topic=self.topic,
+                        randint(1, 100),
+                        image_name,
+                        image_src,
+                        self.topic,
                     )
                 )
                 
@@ -75,3 +75,13 @@ class Album:
     
     def set_quantity_of_images(self, number):
         self._quantity_of_images = number
+
+    def favorite_image(self, image):
+        if image.get_is_favorited() == True:
+            return None
+        image.favorite()
+    def unfavorite_image(self, image):
+        if image.get_is_favorited() == False:
+            return None
+        image.unfavorite()
+    
