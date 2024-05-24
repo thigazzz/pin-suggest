@@ -13,6 +13,9 @@ class Album:
         self._quantity_of_images = quantity_of_images
         self.pinterest_HTML = ""
         self.topic = topic
+    
+    def __repr__(self) -> str:
+        return f'Album(topic={self.topic}, images={self.images}, quantity_of_images={self._quantity_of_images})\n'
 
     def get_images(self):
         """

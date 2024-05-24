@@ -1,3 +1,9 @@
-from collections import namedtuple
+from dataclasses import dataclass
 
-Topic = namedtuple('Topic', 'name, link')
+@dataclass
+class Topic:
+    name: str
+    link: str
+
+    def __str__(self) -> str:
+        return f'{self.name}'

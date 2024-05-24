@@ -1,6 +1,6 @@
 from pinsuggest.gallery import Gallery
 
-from tests.fake import  fake_images_HTML
+from tests.fake import fake_images_HTML
 
 def test_change_the_number_of_images_to_get_of_a_album():
     gallery = Gallery()
