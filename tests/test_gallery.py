@@ -1,11 +1,8 @@
 from pinsuggest.gallery import Gallery
 
-from tests.fake import fake_images_HTML
-
 def test_change_the_number_of_images_to_get_of_a_album():
     gallery = Gallery()
-    albuns = gallery.get_albuns()
-    albuns[0].pinterest_HTML = fake_images_HTML
+    albuns = gallery.get_albuns() # TODO Fake requisition
     
     old_images = albuns[0].get_images()
     gallery.change_number_of_images(albuns[0], 5)

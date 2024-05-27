@@ -1,6 +1,5 @@
 from random import randint
 
-from tests.fake import fake_images_HTML
 from pinsuggest.album import Album
 from pinsuggest.topic import Topic
 from pinsuggest.image import Image
@@ -8,6 +7,7 @@ from pinsuggest.image import Image
 
 # TODO: Test to validate when the number of images 
 # to get is greater of images getted
+# TODO: Create a fixture to repetead code
 
 def test_generate_list_with_different_images_from_each_other():
     """

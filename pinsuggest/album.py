@@ -13,7 +13,6 @@ class Album:
     def __init__(self, topic, quantity_of_images=10) -> None:
         self.images = []
         self._quantity_of_images = quantity_of_images
-        self.pinterest_HTML = ""
         self.topic = topic
         self.url = 'https://br.pinterest.com' + self.topic.link
     
@@ -64,9 +63,7 @@ class Album:
         self.images = image_list
         return self.images
 
-    def _scrap_site(self):
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        print(f'cache/images-{self.topic.name}.html')
+    def _scrap_site(self): # TODO: Move to a Scrapper Class
         if os.path.exists(f'cache/images-{self.topic.name}.html') == False:
             r = requests.get(self.url)
             with open(f'cache/images-{self.topic.name}.html', 'w') as f:

@@ -1,27 +1,7 @@
 from bs4 import BeautifulSoup
 
-
 from pinsuggest.album import Album
 from pinsuggest.topic import Topic
-
-fake_topic_HTML ="""
-<html>
-    <div>
-        <div class="topic">
-            <a class="link" href="link1"/>
-            <div class="name">Topic1</div>
-        </div>
-        <div class="topic">
-            <a class="link" href="link2"/>
-            <div class="name">Topic2</div>
-        </div>
-        <div class="topic">
-            <a class="link" href="link3"/>
-            <div class="name">Topic3</div>
-        </div>
-    </div>
-</html>
-"""
 
 import requests
 import os
@@ -53,7 +33,7 @@ class Gallery:
         
         return _albuns
     
-    def _scrap_site(self):
+    def _scrap_site(self): # TODO: Move to a Scrapper Class
         if os.path.exists('cache/topics.html') == False:
             PINTEREST_URL = 'https://www.pinterest.com/today/'
             r = requests.get(PINTEREST_URL)
