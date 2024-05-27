@@ -1,6 +1,8 @@
+import os
 from random import randint
 
 from bs4 import BeautifulSoup
+import requests
 
 from pinsuggest.image import Image
 
@@ -13,6 +15,7 @@ class Album:
         self._quantity_of_images = quantity_of_images
         self.pinterest_HTML = ""
         self.topic = topic
+        self.url = 'https://br.pinterest.com' + self.topic.link
     
     def __repr__(self) -> str:
         return f'Album(topic={self.topic}, images={self.images}, quantity_of_images={self._quantity_of_images})\n'
@@ -25,9 +28,9 @@ class Album:
         the process continue until a complety new list is generated.
         
         """
-        soup = BeautifulSoup(self.pinterest_HTML, "html.parser")
+        soup = BeautifulSoup(self._scrap_site(), "html.parser")
 
-        images = soup.find_all(class_="image")
+        images = soup.find_all('div', {"data-test-id": "pin-visual-wrapper"})
         image_list = []
         indexes_of_images = []
 
@@ -37,8 +40,10 @@ class Album:
                 if random_index in indexes_of_images:
                     random_index = randint(0, len(images) - 1)
 
-                image_name = images[random_index].find(id="name")
-                image_src = images[random_index].find(id="src")
+                image_element = images[random_index].find('img')
+
+                image_name = image_element['alt']
+                image_src = image_element['src']
                 image_list.append(
                     Image(
                         randint(1, 100),
@@ -58,6 +63,17 @@ class Album:
 
         self.images = image_list
         return self.images
+
+    def _scrap_site(self):
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        print(f'cache/images-{self.topic.name}.html')
+        if os.path.exists(f'cache/images-{self.topic.name}.html') == False:
+            r = requests.get(self.url)
+            with open(f'cache/images-{self.topic.name}.html', 'w') as f:
+                f.write(r.text)
+
+        with open(f'cache/images-{self.topic.name}.html', 'r') as f:
+            return f.read()
 
     def there_are_no_repeated_images(self, list):
         if len(list) < 2:

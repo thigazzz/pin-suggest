@@ -26,7 +26,6 @@ def test_generate_list_with_different_images_from_each_other():
         ),
     ]
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
-    album.pinterest_HTML = fake_images_HTML
 
     image_list = album.get_images()
 
@@ -41,7 +40,6 @@ def test_generate_list_of_different_images_between_one_call_and_another():
     Test to ensure that subsequent sets of images do not contain duplicates from previous sets.
     """
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
-    album.pinterest_HTML = fake_images_HTML
 
     old_list = album.get_images()
     new_list = album.get_images()
@@ -62,7 +60,6 @@ def test_get_images_for_specified_quantity():
     # The quantity, in this case, is 5 images per call
     """
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
-    album.pinterest_HTML = fake_images_HTML
 
     images_list = album.get_images()
 
@@ -107,7 +104,6 @@ def test_detect_repeated_images_between_older_and_newer_images():
 
 def test_favorite_and_image():
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
-    album.pinterest_HTML = fake_images_HTML
 
     images = album.get_images()
     album.favorite_image(images[0])
@@ -116,7 +112,6 @@ def test_favorite_and_image():
 
 def test_not_favorite_a_always_favorited_image():
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
-    album.pinterest_HTML = fake_images_HTML
 
     images = album.get_images()
     album.favorite_image(images[0])
@@ -125,7 +120,6 @@ def test_not_favorite_a_always_favorited_image():
 
 def test_unfavorite_and_image():
     album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
-    album.pinterest_HTML = fake_images_HTML
 
     images = album.get_images()
     album.favorite_image(images[0])
