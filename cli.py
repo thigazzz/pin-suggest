@@ -1,3 +1,4 @@
+from typing import Annotated, Optional
 import typer
 app = typer.Typer()
 
@@ -5,8 +6,9 @@ from pinsuggest.gallery import Gallery
 
 # TODO: Found a way to not setup app
 def setup_app():
-    gallery = Gallery()
+    global gallery
     global albuns
+    gallery = Gallery()
     albuns =  gallery.get_albuns()
     
 
@@ -22,9 +24,12 @@ def topics():
     print("\nDigite o comando 'images' + o número do tópico desejado: ")
 
 @app.command()
-def images(number_of_topic: int):
-    print("Sugerimos essas imagens para você.\n")
+def images(number_of_topic: int, number_of_images_to_get: Annotated[Optional[int], typer.Argument()] = None):
     current_album = albuns[number_of_topic - 1]
+    if number_of_images_to_get:
+        gallery.change_number_of_images(album=current_album, number_of_images_to_get=number_of_images_to_get)
+
+    print("Sugerimos essas imagens para você.\n")
     current_album.get_images()
     c = 1
     for image in current_album.images:
