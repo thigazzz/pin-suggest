@@ -30,9 +30,9 @@ def test_generate_list_with_different_images_from_each_other():
     image_list = album.get_images()
 
     assert (
-        album.there_are_no_repeated_images(mock_equal_images) == False
+        album._Album__there_are_no_repeated_images(mock_equal_images) == False
     )  # add this assert to a new test case
-    assert album.there_are_no_repeated_images(image_list) == True
+    assert album._Album__there_are_no_repeated_images(image_list) == True
 
 
 def test_generate_list_of_different_images_between_one_call_and_another():
@@ -96,7 +96,7 @@ def test_detect_repeated_images_between_older_and_newer_images():
         Image(id=randint(1, 100), title="name", link_to="src5", topic=Topic(name="topic1", link="any")),
     ]
 
-    is_diff_image_list = album.has_different_images_comparing_another_list(
+    is_diff_image_list = album._Album__has_different_images_comparing_another_list(
         old_image_list, new_image_list
     )
 
