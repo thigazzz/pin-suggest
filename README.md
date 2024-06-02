@@ -10,10 +10,10 @@ Coming soon...
 Coming soon...
 
 ## Features
-- [ ] **Topic-Based Image Retrieval**: Provide images from a specific topic on Pinterest.
-- [ ] **Diverse Image Selection**: Ensure that the images provided are different from each other.
-- [ ] **Customizable Image Count**: Allow users to set the number of images to be retrieved (default is 10).
-- [ ] **Image Favoriting**: Enable users to favorite an image and store its link for later reference.
+- [x] **Topic-Based Image Retrieval**: Provide images from a specific topic on Pinterest.
+- [x] **Diverse Image Selection**: Ensure that the images provided are different from each other.
+- [x] **Customizable Image Count**: Allow users to set the number of images to be retrieved (default is 10).
+- [x] **Image Favoriting**: Enable users to favorite an image and store its link for later reference.
 - [ ] **Favorites Management**: Provide CRUD (Create, Read, Update, Delete) operations for managing favorited images.
 
 ## Motivation
