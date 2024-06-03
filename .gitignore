@@ -163,3 +163,4 @@ cython_debug/
 docs/uml
 cache/
 .vscode
+database/
