@@ -18,14 +18,19 @@ class Database(ABC):
 
     @abstractmethod
     def delete(self, id) -> None: ...
+import os
 
 class SqliteDatabase(Database):
     def __init__(self) -> None:
         self.__setup()
     
     def __setup(self):
+        self.__create_database()
         self.__open_connection()
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS favorites(id, title, link, topic)')
+
+    def __create_database(self):
+        if os.path.exists('database/favorites.db') == False:
+            sqlite3.connect('database/favorites.db')    
     
     def __open_connection(self):
         self.connection = sqlite3.connect('database/favorites.db')

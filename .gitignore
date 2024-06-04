@@ -163,4 +163,4 @@ cython_debug/
 docs/uml
 cache/
 .vscode
-database/
+database/favorites.db
