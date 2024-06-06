@@ -1,8 +1,8 @@
 from random import randint
 
-from pinsuggest.album import Album
-from pinsuggest.topic import Topic
-from pinsuggest.image import Image
+from src.pinsuggest.album import Album
+from src.pinsuggest.topic import Topic
+from src.pinsuggest.image import Image
 
 
 # TODO: Test to validate when the number of images 

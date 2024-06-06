@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pinsuggest.topic import Topic
+from src.pinsuggest.topic import Topic
 
 @dataclass
 class Image:

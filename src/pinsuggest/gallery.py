@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
-from pinsuggest.album import Album
-from pinsuggest.topic import Topic
+from src.pinsuggest.album import Album
+from src.pinsuggest.topic import Topic
 
 import requests
 import os

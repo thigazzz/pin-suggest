@@ -5,7 +5,7 @@ from random import randint
 
 from bs4 import BeautifulSoup
 
-from pinsuggest.image import Image
+from src.pinsuggest.image import Image
 
 class Album:
     """

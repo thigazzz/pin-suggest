@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from typing import Any
-from random import randint
 from abc import ABC, abstractmethod
 
 class Database(ABC):
@@ -66,18 +65,16 @@ class Sqlite(Database):
 
 
 
-class SqliteTopicsRepository(Sqlite):
+class SqliteTopicsModel(Sqlite):
     def __init__(self) -> None:
         self.driver = super().__init__('topics')
     
     def create(self, item) -> Any:
         self.open_connection()
-        id = randint(1,1000) # TODO: Transfer id making to top layer
-        item[0] = id
         self.cursor.execute(f'INSERT INTO {self.table} VALUES(?, ?, ?);', item)
         self.connection.commit()
         self.close_connection()
-        new_topic = self.read_one(id)
+        new_topic = self.read_one(item[0])
         return new_topic
     
     def update(self, item, id) -> Any:
@@ -94,19 +91,24 @@ class SqliteTopicsRepository(Sqlite):
         self.close_connection()
         new_topic = self.read_one(id)
         return new_topic
+    
+    def read_one_by_name(self, name):
+        self.open_connection()
+        response = self.cursor.execute(f"SELECT * FROM {self.table} WHERE name = '{name}';")
+        item = response.fetchone()
+        self.close_connection()
+        return item
 
-class SqliteImagesRepository(Sqlite):
+class SqliteImagesModel(Sqlite):
     def __init__(self) -> None:
         self.driver = super().__init__('images')
     
     def create(self, item) -> Any:
         self.open_connection()
-        id = randint(1,1000) # TODO: Transfer id making to top layer
-        item[0] = id
         self.cursor.execute(f'INSERT INTO {self.table} VALUES(?, ?, ?, ?);', item)
         self.connection.commit()
         self.close_connection()
-        new_image = self.read_one(id)
+        new_image = self.read_one(item[0])
         return new_image
     
     def update(self, item, id) -> Any:
@@ -123,3 +125,4 @@ class SqliteImagesRepository(Sqlite):
         self.close_connection()
         new_image = self.read_one(id)
         return new_image
+    
