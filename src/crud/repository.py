@@ -22,16 +22,17 @@ class Database(ABC):
 
 
 class Sqlite(Database):
-    def __init__(self, table: str) -> None:
+    def __init__(self, table: str, database_path) -> None:
         self.table = table
+        self.path = database_path
         self.__create_database()
 
     def __create_database(self):
-        if os.path.exists('database/favorites.db') == False:
-            sqlite3.connect('database/favorites.db')    
+        if os.path.exists(self.path) == False:
+            sqlite3.connect(self.path)    
     
     def open_connection(self):
-        self.connection = sqlite3.connect('database/favorites.db')
+        self.connection = sqlite3.connect(self.path)
         self.cursor = self.connection.cursor()
     
     def close_connection(self):
@@ -64,8 +65,8 @@ class Sqlite(Database):
         return deleted_item
 
 class SqliteTopicsRepository(Sqlite):
-    def __init__(self) -> None:
-        super().__init__('topics')
+    def __init__(self,  database_path) -> None:
+        super().__init__('topics', database_path=database_path)
     
     def create(self, item) -> Any:
         self.open_connection()
@@ -98,8 +99,8 @@ class SqliteTopicsRepository(Sqlite):
         return item
 
 class SqliteImagesModelRepository(Sqlite):
-    def __init__(self) -> None:
-        super().__init__('images')
+    def __init__(self, database_path) -> None:
+        super().__init__('images', database_path=database_path)
     
     def create(self, item) -> Any:
         self.open_connection()

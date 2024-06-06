@@ -16,9 +16,11 @@ class TopicModel(Database):
         """
         Retornar id do topico. Se topico não existir, criar um
         """
-        _topic = self.read_one(topic.name, by=True)
+        _topic = self.repository.read_one_by_name(topic.name)
         if _topic == None:
+            print("AAAAAAAAAAAA")
             return self.create(topic).id
+        _topic = self.__make_topic(_topic)
         return _topic.id
     
     def __make_topic(self, data):
@@ -29,9 +31,10 @@ class TopicModel(Database):
         
     def read(self) -> list[Topic]:
         topics_data = self.repository.read()
-        topic = []
+        topics = []
         for topic_data in topics_data:
-            topic.append(self.__make_topic(topic_data))
+            topics.append(self.__make_topic(topic_data))
+        return topics
     def read_one(self, id, by=False) -> Topic:
         if by:
             return self.__make_topic(self.repository.read_one_by_name(id))
@@ -62,4 +65,6 @@ class ImageModel(Database):
         return self.__make_image(self.repository.read_one(id))
     def delete(self, id) -> None:
         return self.repository.delete(id)
+    def update(self, item, id) -> Any:
+        ...
     

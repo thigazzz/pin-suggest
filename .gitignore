@@ -165,3 +165,4 @@ docs/database
 cache/
 .vscode
 database/favorites.db
+database/favorites.dev.db
