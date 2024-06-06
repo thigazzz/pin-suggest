@@ -29,7 +29,7 @@ class Gallery:
             topic_name = topic.select_one('a > div > div > div > div > div > div > div h2').text
             topic_link = topic.find('a')['href']
 
-            _albuns.append(Album(Topic(name=topic_name, link=topic_link)))
+            _albuns.append(Album(Topic(id=None, name=topic_name, link=topic_link)))
         
         return _albuns
     

@@ -1,128 +1,65 @@
-import os
-import sqlite3
+from random import randint
 from typing import Any
-from abc import ABC, abstractmethod
 
-class Database(ABC):
-    @abstractmethod
-    def create(self, item)-> Any:  ...
+from src.pinsuggest.image import Image
+from src.pinsuggest.topic import Topic
+from src.crud.repository import Database
 
-    @abstractmethod
-    def read(self) -> list[Any]: ...
+def make_id():
+    return randint(1,1000)
 
-    @abstractmethod
-    def read_one(self, id) -> Any: ...
+class TopicModel(Database):
+    def __init__(self, repository) -> None:
+        self.repository = repository
 
-    @abstractmethod
-    def update(self, item, id) -> Any: ...
-
-    @abstractmethod
-    def delete(self, id) -> None: ...
-
-class Sqlite(Database):
-    def __init__(self, table: str) -> None:
-        self.table = table
-        self.__create_database()
-
-    def __create_database(self):
-        if os.path.exists('database/favorites.db') == False:
-            sqlite3.connect('database/favorites.db')    
+    def get_topic_id(self, topic) -> int:
+        """
+        Retornar id do topico. Se topico não existir, criar um
+        """
+        _topic = self.read_one(topic.name, by=True)
+        if _topic == None:
+            return self.create(topic).id
+        return _topic.id
     
-    def open_connection(self):
-        self.connection = sqlite3.connect('database/favorites.db')
-        self.cursor = self.connection.cursor()
+    def __make_topic(self, data):
+        return  Topic(id=data[0], name=data[1], link=data[2])
     
-    def close_connection(self):
-        self.connection.close()
+    def create(self, item: Topic) -> Topic:
+        return self.__make_topic(self.repository.create((make_id(), item.name, item.link)))
+        
+    def read(self) -> list[Topic]:
+        topics_data = self.repository.read()
+        topic = []
+        for topic_data in topics_data:
+            topic.append(self.__make_topic(topic_data))
+    def read_one(self, id, by=False) -> Topic:
+        if by:
+            return self.__make_topic(self.repository.read_one_by_name(id))
+        return self.__make_topic(self.repository.read_one(id))
+    def update(self, item: Topic, id) -> Topic:
+        return self.__make_topic(self.repository.update((item.name, item.link), id))
+    def delete(self, id) -> None:
+        return self.repository.delete(id)
+class ImageModel(Database):
+    def __init__(self, image_repository, topic_model: TopicModel) -> None:
+        self.repository = image_repository
+        self.topic_model = topic_model
 
-    def create(self, item) -> Any: ...
+    def __make_image(self, data) -> Image:
+        return Image(id=data[0], title=data[1], link_to=data[2], topic=self.topic_model.read_one(data[3]))
 
-    def read(self) -> list[Any]:
-        self.open_connection()
-        response = self.cursor.execute(f'SELECT * FROM {self.table};')
-        itens = response.fetchall()
-        self.close_connection()
-        return itens
-
-    def read_one(self, id) -> Any:
-        self.open_connection()
-        response = self.cursor.execute(f'SELECT * FROM {self.table} WHERE id = {id};')
-        item = response.fetchone()
-        self.close_connection()
-        return item
-
-    def update(self, item, id) -> Any: ...
-
-    def delete(self, id) -> Any:
-        deleted_item = self.read_one(id)
-        self.open_connection()
-        self.cursor.execute(f'DELETE FROM {self.table} WHERE id = {id};')
-        self.connection.commit()
-        self.close_connection()
-        return deleted_item
-
-
-
-
-
-class SqliteTopicsModel(Sqlite):
-    def __init__(self) -> None:
-        self.driver = super().__init__('topics')
+    def create(self, item: Image) -> Image:
+        image_to_create = (make_id(), item.title, item.link_to, self.topic_model.get_topic_id(item.topic))
+        return self.__make_image(self.repository.create(item=image_to_create))
     
-    def create(self, item) -> Any:
-        self.open_connection()
-        self.cursor.execute(f'INSERT INTO {self.table} VALUES(?, ?, ?);', item)
-        self.connection.commit()
-        self.close_connection()
-        new_topic = self.read_one(item[0])
-        return new_topic
-    
-    def update(self, item, id) -> Any:
-        self.open_connection()
-        self.cursor.execute(
-            f"""
-                UPDATE topics
-                SET name = '{item[0]}',
-                link = '{item[1]}'
-                WHERE id = {id};
-            """
-        )
-        self.connection.commit()
-        self.close_connection()
-        new_topic = self.read_one(id)
-        return new_topic
-    
-    def read_one_by_name(self, name):
-        self.open_connection()
-        response = self.cursor.execute(f"SELECT * FROM {self.table} WHERE name = '{name}';")
-        item = response.fetchone()
-        self.close_connection()
-        return item
-
-class SqliteImagesModel(Sqlite):
-    def __init__(self) -> None:
-        self.driver = super().__init__('images')
-    
-    def create(self, item) -> Any:
-        self.open_connection()
-        self.cursor.execute(f'INSERT INTO {self.table} VALUES(?, ?, ?, ?);', item)
-        self.connection.commit()
-        self.close_connection()
-        new_image = self.read_one(item[0])
-        return new_image
-    
-    def update(self, item, id) -> Any:
-        self.open_connection()
-        self.cursor.execute(
-            f"""
-                UPDATE {self.table} 
-                SET title = '{item[0]}', 
-                link = '{item[1]}'
-                WHERE id = {id};
-            """
-        )
-        self.connection.commit()
-        self.close_connection()
-        new_image = self.read_one(id)
-        return new_image
+    def read(self) -> list[Image]:
+        images_data = self.repository.read()
+        images = []
+        for image_data in images_data:
+            images.append(self.__make_image(image_data))
+        return images
+    def read_one(self, id) -> Image:
+        return self.__make_image(self.repository.read_one(id))
+    def delete(self, id) -> None:
+        return self.repository.delete(id)
     

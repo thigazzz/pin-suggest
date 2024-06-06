@@ -16,16 +16,16 @@ def test_generate_list_with_different_images_from_each_other():
     """
     mock_equal_images = [
         Image(
-            id=1, title="title1", link_to="src1", topic=Topic(name="topic1", link="any")
+            id=1, title="title1", link_to="src1", topic=Topic(id=1, name="topic1", link="any")
         ),
         Image(
-            id=1, title="title2", link_to="src1", topic=Topic(name="topic1", link="any")
+            id=1, title="title2", link_to="src1", topic=Topic(id=1, name="topic1", link="any")
         ),
         Image(
-            id=1, title="title1", link_to="src2", topic=Topic(name="topic1", link="any")
+            id=1, title="title1", link_to="src2", topic=Topic(id=1, name="topic1", link="any")
         ),
     ]
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=3)
 
     image_list = album.get_images()
 
@@ -39,7 +39,7 @@ def test_generate_list_of_different_images_between_one_call_and_another():
     """
     Test to ensure that subsequent sets of images do not contain duplicates from previous sets.
     """
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=3)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=3)
 
     old_list = album.get_images()
     new_list = album.get_images()
@@ -59,7 +59,7 @@ def test_get_images_for_specified_quantity():
     [Image1, Image2, Image3, Image4, Image5]
     # The quantity, in this case, is 5 images per call
     """
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=5)
 
     images_list = album.get_images()
 
@@ -84,16 +84,16 @@ def test_detect_repeated_images_between_older_and_newer_images():
     False # is not different, have a equal image
     # [image1, image2, image3] == [image4, image2, image5] image2 is same in both
     """
-    album = Album(topic=Topic(name="topic1", link="any"))
+    album = Album(topic=Topic(id=1, name="topic1", link="any"))
     old_image_list = [
-        Image(id=randint(1, 100), title="name", link_to="src1", topic=Topic(name="topic1", link="any")),
-        Image(id=randint(1, 100), title="name", link_to="src2", topic=Topic(name="topic1", link="any")),
-        Image(id=randint(1, 100), title="name", link_to="src3", topic=Topic(name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src1", topic=Topic(id=1, name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src2", topic=Topic(id=1, name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src3", topic=Topic(id=1, name="topic1", link="any")),
     ]
     new_image_list = [
-        Image(id=randint(1, 100), title="name", link_to="src4", topic=Topic(name="topic1", link="any")),
-        Image(id=randint(1, 100), title="name", link_to="src2", topic=Topic(name="topic1", link="any")),
-        Image(id=randint(1, 100), title="name", link_to="src5", topic=Topic(name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src4", topic=Topic(id=1, name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src2", topic=Topic(id=1, name="topic1", link="any")),
+        Image(id=randint(1, 100), title="name", link_to="src5", topic=Topic(id=1, name="topic1", link="any")),
     ]
 
     is_diff_image_list = album._Album__has_different_images_comparing_another_list(
@@ -103,7 +103,7 @@ def test_detect_repeated_images_between_older_and_newer_images():
     assert is_diff_image_list == False
 
 def test_favorite_and_image():
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=5)
 
     images = album.get_images()
     album.favorite_image(images[0])
@@ -111,7 +111,7 @@ def test_favorite_and_image():
     assert images[0].get_is_favorited() == True
 
 def test_not_favorite_a_always_favorited_image():
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=5)
 
     images = album.get_images()
     album.favorite_image(images[0])
@@ -119,7 +119,7 @@ def test_not_favorite_a_always_favorited_image():
     assert album.favorite_image(images[0]) == None
 
 def test_unfavorite_and_image():
-    album = Album(topic=Topic(name="topic1", link="any"), quantity_of_images=5)
+    album = Album(topic=Topic(id=1, name="topic1", link="any"), quantity_of_images=5)
 
     images = album.get_images()
     album.favorite_image(images[0])
