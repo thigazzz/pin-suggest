@@ -166,3 +166,4 @@ cache/
 .vscode
 database/favorites.db
 database/favorites.dev.db
+.history

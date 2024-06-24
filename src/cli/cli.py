@@ -1,60 +1,66 @@
-from typing import Annotated, Optional
-import typer
-app = typer.Typer()
-images_commander = typer.Typer()
+from class_cli import CLI
 
-from pinsuggest.gallery import Gallery
+cli = CLI()
 
-# TODO: Found a way to keep the context between the commands
-def setup_app():
-    global gallery
-    global albuns
-    gallery = Gallery()
-    albuns =  gallery.get_albuns()
-setup_app()
+from src.crud.repository import SqliteImagesModelRepository, SqliteTopicsRepository
+from src.crud.controllers import Controller
+from src.crud.models import ImageModel, TopicModel
 
-@app.command()
-def topics():
-    print("Esse são os tópicos recomendados de hoje: \n")
-    c = 1
-    for album in albuns:
-        print(f'[{c}] {album.topic.name}')
-        c += 1
-    print("\nDigite o comando 'images' + o número do tópico desejado: ")
-
-@images_commander.command()
-def show(number_of_topic: int, number_of_images_to_get: Annotated[Optional[int], typer.Argument()] = None):
-    current_album = albuns[number_of_topic - 1]
-    if number_of_images_to_get:
-        gallery.change_number_of_images(album=current_album, number_of_images_to_get=number_of_images_to_get)
-
-    print("Sugerimos essas imagens para você.\n")
-    current_album.get_images()
-    c = 1
-    for image in current_album.images:
-        print(f'[{c}] {image.title}: {image.link_to}\n')
-        c += 1
-@images_commander.command()
-def favorite(topic: int, image: int):
-    current_album = albuns[topic - 1]
-    images = current_album.get_images()
-    print(images[image - 1]._is_favorited)
-    current_album.favorite_image(images[image - 1])
-    print(images[image - 1]._is_favorited)
-
-@images_commander.command()
-def unfavorite(topic: int, image: int):
-    current_album = albuns[topic - 1]
-    images = current_album.get_images()
-    if images[image - 1]._is_favorited == False:
-        print("Imagem não está favoritada para desfavoritar")
-        return
-    print(images[image - 1]._is_favorited)
-    current_album.unfavorite_image(images[image - 1])
-    print(images[image - 1]._is_favorited)
-
-app.add_typer(images_commander, name='images')
+DATABASE_PATH = 'database/favorites.db'
 
 
-if __name__ == "__main__":
-    app()
+@cli.Program()
+class Program:
+    def __init__(self) -> None:
+        topic_model = TopicModel(repository=SqliteTopicsRepository(database_path=DATABASE_PATH))
+        image_model = ImageModel(image_repository=SqliteImagesModelRepository(database_path=DATABASE_PATH), topic_model=topic_model)
+        self.controller = Controller(image_model=image_model)
+        self.showed_favorited_images = False
+
+    @cli.Operation()
+    def show_topics(self):
+        print("Esse são os tópicos recomendados de hoje: \n")
+        c = 1
+        for topic in self.controller.show_topics():
+            print(f'[{c}] {topic}')
+            c += 1
+        print("\nDigite o comando 'images' + o número do tópico desejado: ")
+        
+    
+    @cli.Operation()
+    def images(self, number_of_topic, number_of_images_to_get):
+        print("Sugerimos essas imagens para você.\n") ## Tratar argumentos opcional
+        c = 1
+        for image in self.controller.show_images(int(number_of_topic), int(number_of_images_to_get)):
+            print(f'[{c}] {image.title}: {image.link_to}\n')
+            c += 1
+
+    @cli.Operation()
+    def favorite(self, number_of_image):
+        favorited_image = self.controller.favorite(image=int(number_of_image))
+        print(f"Imagem: {favorited_image.title} favoritada!")
+
+    @cli.Operation()
+    def unfavorite(self, image):
+        if self.showed_favorited_images == False:
+            print("Veja primeiro quais imagens estão favoritadas!")
+            return
+        self.controller.unfavorite(image=int(image))
+        print("Imagem desfavoritada!")
+        self.showed_favorited_images = False
+
+    @cli.Operation()
+    def favorited(self):
+        favorited_images = self.controller.list_all_favorited_images()
+        print('Essas são as imagens favoritadas')
+        c = 1
+        for f_image in favorited_images:
+            print(f"[{c}] - {f_image.title}")
+            c += 1
+        self.showed_favorited_images = True
+
+        
+    
+    
+if __name__ == '__main__':
+    Program().CLI.main()

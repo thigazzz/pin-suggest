@@ -32,5 +32,5 @@ def upgrade(connection):
 
 def downgrade(connection):
     # add your downgrade step here
-    connection.execute('DROP TABLE favorites')
+    connection.execute('DROP TABLE favorites') # TODO: Drop the right tables 
     connection.commit()
