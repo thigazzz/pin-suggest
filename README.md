@@ -12,17 +12,6 @@ PinSuggest is a web scraping application designed to fetch images and their resp
 - [Contributing](#contributing)
 - [License](#license)
 
-
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-  - [CLI Usage](#cli-usage)
-- [Built With](#built-with)
-- [Features](#features)
-- [Motivation](#motivation)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Installation
 1. **Clone the repository:**
     ```bash
