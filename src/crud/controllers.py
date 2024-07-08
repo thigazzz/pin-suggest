@@ -23,7 +23,7 @@ class Controller:
         
         return self.current_album.get_images()
 
-    def favorite(self, image: int):
+    def favorite(self, image: int): # TODO: FIX BUG, Not same picutures shows to favorite
         images = self.current_album.get_images()
         current_image = images[image - 1]
         return self.favorite_image(current_image)

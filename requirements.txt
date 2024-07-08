@@ -2,6 +2,7 @@ beautifulsoup4==4.12.3
 caribou==0.3.0
 certifi==2024.2.2
 charset-normalizer==3.3.2
+class-cli==0.3.3
 click==8.1.7
 exceptiongroup==1.2.1
 idna==3.7
@@ -10,6 +11,7 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 packaging==24.0
 pluggy==1.5.0
+prompt_toolkit==3.0.47
 Pygments==2.18.0
 pytest==8.2.0
 requests==2.32.2
@@ -20,3 +22,4 @@ tomli==2.0.1
 typer==0.12.3
 typing_extensions==4.12.0
 urllib3==2.2.1
+wcwidth==0.2.13

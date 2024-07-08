@@ -8,6 +8,7 @@ from src.pinsuggest.image import Image
 # TODO: Test to validate when the number of images 
 # to get is greater of images getted
 # TODO: Create a fixture to repetead code
+# TODO: Mock requests lib to return fake html (cache folder is used in moment)
 
 def test_generate_list_with_different_images_from_each_other():
     """
